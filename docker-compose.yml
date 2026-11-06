@@ -1,0 +1,54 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: nexvault-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: nexvault
+      POSTGRES_USER: nexvault
+      POSTGRES_PASSWORD: nexvault_secure_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nexvault -d nexvault"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: nexvault-backend
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://nexvault:nexvault_secure_password@postgres:5432/nexvault
+      JWT_SECRET: dev-secret-change-me
+      APP_ENV: docker
+      PORT: 8000
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: sh -c "cargo run --release"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: nexvault-frontend
+    restart: unless-stopped
+    environment:
+      VITE_API_URL: http://localhost:8000
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:

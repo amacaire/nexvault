@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nexvault</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <section id="loginView" class="screen active">
+        <div class="brand-row">
+          <div class="brand-badge">N</div>
+          <div>
+            <div class="eyebrow">NEXVAULT</div>
+            <div class="title">Secure access</div>
+          </div>
+        </div>
+
+        <form id="loginForm" class="stack">
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" type="email" placeholder="admin@nexvault.local" />
+          </div>
+
+          <div class="field">
+            <label for="password">Mot de passe</label>
+            <input id="password" type="password" placeholder="••••••••" />
+          </div>
+
+          <button id="loginButton" type="submit" class="primary-btn">Se connecter</button>
+        </form>
+
+        <div id="loginStatus" class="status error" aria-live="polite"></div>
+      </section>
+
+      <section id="vaultView" class="screen">
+        <div class="vault-header">
+          <div>
+            <div class="eyebrow">NEXVAULT</div>
+            <div class="title">Mes identifiants</div>
+          </div>
+          <button id="logoutButton" type="button" class="ghost-btn">Déconnexion</button>
+        </div>
+
+        <div class="list-header">
+          <span>Enregistrés</span>
+          <div class="header-actions">
+            <button id="capturePageButton" type="button" class="mini-btn">Capturer</button>
+            <button id="addCredentialButton" type="button" class="add-btn" aria-label="Ajouter">+</button>
+          </div>
+        </div>
+
+        <div id="credentialList" class="credential-list"></div>
+
+        <div id="currentSiteBlock" class="site-block hidden">
+          <div class="site-label">Page active</div>
+          <div id="currentSiteName" class="site-name">-</div>
+          <div class="site-actions">
+            <button id="saveCurrentPageButton" type="button" class="mini-btn primary">Ajouter depuis la page</button>
+            <button id="autofillCurrentPageButton" type="button" class="mini-btn">Remplir</button>
+          </div>
+        </div>
+
+        <form id="newCredentialForm" class="new-form hidden" autocomplete="off">
+          <div class="field">
+            <label for="newTitle">Site</label>
+            <input id="newTitle" type="text" placeholder="GitHub" />
+          </div>
+
+          <div class="field">
+            <label for="newLogin">Login</label>
+            <input id="newLogin" type="text" placeholder="alice@site.com" />
+          </div>
+
+          <div class="field">
+            <label for="newPassword">Password</label>
+            <input id="newPassword" type="text" placeholder="••••••••" />
+          </div>
+
+          <div class="field">
+            <label for="newUrl">URL</label>
+            <input id="newUrl" type="url" placeholder="https://github.com" />
+          </div>
+
+          <div class="field">
+            <label for="newNotes">Notes</label>
+            <textarea id="newNotes" rows="3" placeholder="Token personnel, accès admin, etc."></textarea>
+          </div>
+
+          <div class="button-row">
+            <button type="submit" class="primary-btn">Enregistrer</button>
+            <button type="button" id="cancelAddButton" class="ghost-btn">Annuler</button>
+          </div>
+        </form>
+
+        <div id="vaultStatus" class="status" aria-live="polite"></div>
+      </section>
+    </div>
+
+    <script src="vault-crypto.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>
